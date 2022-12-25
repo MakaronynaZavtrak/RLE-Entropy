@@ -1,23 +1,30 @@
-//Programm "Entropy of Schennon
-let s = 'kapibara';
-alph = new Array();
-for (i = 0; i < s.length; i++) {
-if (s.charAt(i) in alph) {
-alph[s.charAt(i)]++;
-}
-else {
-alph[s.charAt(i)] = 1;
-}
-}
-n = 0;
-for (i in alph) {
-alph[i] /= s.length;
-
-n++;
-}
-h = 0;
-for (i in alph) {
-h -= alph[i] * Math.log(alph[i]);
-}
-h /= Math.log(n);
-console.log(h)
+ let string = 'capusta';
+        let alph = [];
+        let arr = [];
+        let m;
+        //создание массива с уник. элементами
+        for (let i = 0; i < string.length; i++) {
+            if (string[i] in alph) {
+                alph[string[i]]++;
+            }
+            else {
+                alph[string[i]] = 1;
+            };
+        }; //массив создался
+        let n = 0;
+        //найдём вероятность каждого встречащегося элемента
+            for (let i in alph) {
+                alph[i] /= string.length;
+                n++;
+            };
+            let h = 0;
+            for (let i in alph) {
+                h -= alph[i] * Math.log(alph[i]);
+        };
+        if (h == 0 && Math.log(n)==0) {
+            console.log("Энтропия равна нулю!")
+        }
+        else {
+            m = h / Math.log(n);
+            console.log(m);
+        };

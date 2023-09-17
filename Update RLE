@@ -1,0 +1,84 @@
+//Coding RLE
+
+//Договоримся использовать в качестве спец-символа знак "#"
+let fs = require('fs')
+let input_filename = process.argv[2]
+let output_filename = process.argv[3]
+
+let string = fs.readFileSync(input_filename).toString();;//исходная строка
+console.log(string);//Вывод исходной строки
+let counter = 1;//объявляем счетчик, который будет отвечать за количество совпадающих подряд символов 
+let array = [];//создаем массив, в который будем записывать закодированную строку
+for (let i = 0; i < string.length; i++) {//обьявляем цикл, который считает количество совпадений символов 
+    if (string[i] == string[i + 1]) {//если текущий и следующий символы совпали,
+        counter += 1;//то переменную counter увеличиваем на 1
+    }
+    else {
+        if (string[i] == string[i - 1]) {//если предворяющий символ равен текущему
+            if (counter <= 255) {//Здесь делается проверка на диапазон переменной counter
+                if (counter > 9) {
+                    array.push("#", String.fromCharCode(counter), string[i]);//эта ветка выполняется, если counter находится в диапазоне [10;255]
+                    counter = 1;
+                }
+                else {
+                    if (counter == 1){
+                        array.push(string[i]);    
+                    } else {
+                    array.push("#", counter, string[i]);//эта ветка работает, если counter находится в промежутке [2;9]
+                    counter = 1;
+                }
+            }
+        }
+            else {//иначе, если переменная counter превосходит число 255
+                while (counter > 255) {//уходим в цикл, который печатает по спецсимволу, у которого ASCII-код максимальный, по итерации, пока counter не станет меньше 255
+                    array.push("#", String.fromCharCode(255), string[i]);
+                    counter -= 255;
+                };
+                if (counter > 9) {//если counter находится в пределах [10;255]
+                    array.push("#", String.fromCharCode(counter), string[i]);//делаем вставку соответствующего спец-символа в массив array
+                }
+                else {//если counter находится в пределах [1;9]
+                    if (counter == 1){
+                        array.push(string[i]);    
+                    } else {
+                    array.push("#", counter, string[i]);
+                }
+            }
+            }
+        }
+        else {
+            array.push(string[i]);
+        };
+    };
+}
+console.log(array.join(''));//выводим закодированную строку
+
+
+//Decoding RLE
+
+let word = array.join('');//преобразовываем массив в строку
+let array2 = [];//в массив array2 будем записывать результат декодинга
+for (let i = 0; i < word.length; i++) {
+    if (word[i] == "#") {//если текущим символом является спец-символ "#"
+        let n = Number(word[i+1]);//в переменную n записываем число, находящееся в промежутке [2;9]
+        if (n < 10) {
+            for (let j = 0; j < n; j++) {//далее, push-им в массив символ, идущий в строке после числа "n" n раз
+                array2.push(word[i + 2])
+            }
+            i += 2;//делаем переход на следующий символ в строке
+        }
+        else {//если же количество символов варьируется в промежутке [10;255] превосходит
+            let m = word.codePointAt(i + 1);//в переменную m записываем число, характеризующее ASCII-код символа, идущего после "#"
+            for (let z = 0; z < m; z++) {//далее push-им в массив сивол, идущий в строке после символа из ASCII-кода m раз
+                array2.push(word[i + 2]);
+            }
+            i += 2;//делаем переход на следующий символ в строке
+        }
+    }
+    else {
+        array2.push(word[i]);//эта ветка работает, если текущий символ не является "#"
+    };
+};
+console.log(array2.join(''));//выводим расшифрованную строку ( её исходный вид)
+console.log("Коэффициент сжатия: ", string.length/(array.join('').length))
+

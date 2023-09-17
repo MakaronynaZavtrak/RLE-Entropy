@@ -77,3 +77,4 @@ for (let i = 0; i < word.length; i++) {
     };
 };
 console.log(array2.join(''));//выводим расшифрованную строку ( её исходный вид)
+console.log("Коэффициент сжатия: ", string.length/(array.join('').length))

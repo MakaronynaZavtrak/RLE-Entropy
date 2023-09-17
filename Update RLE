@@ -5,8 +5,7 @@ let fs = require('fs')
 let input_filename = process.argv[2]
 let output_filename = process.argv[3]
 
-let string = fs.readFileSync(input_filename).toString();;//исходная строка
-console.log(string);//Вывод исходной строки
+let string = fs.readFileSync(input_filename).toString();//исходная строка
 let counter = 1;//объявляем счетчик, который будет отвечать за количество совпадающих подряд символов 
 let array = [];//создаем массив, в который будем записывать закодированную строку
 for (let i = 0; i < string.length; i++) {//обьявляем цикл, который считает количество совпадений символов 
@@ -51,9 +50,7 @@ for (let i = 0; i < string.length; i++) {//обьявляем цикл, кото
         };
     };
 }
-console.log(array.join(''));//выводим закодированную строку
-
-
+fs.writeFileSync(process.argv[3], string);
 //Decoding RLE
 
 let word = array.join('');//преобразовываем массив в строку

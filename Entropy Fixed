@@ -1,7 +1,9 @@
-let word = 'AAAABBCD'//входная строка
+let fs = require('fs');
+let fileName = process.argv[2];
+let word =  fs.readFileSync(fileName).toString();//входная строка
 let alph = []//в этот массив будем записывать уникальные элементы строки "word"
 for (let i = 0; i < word.length; i++) {//создание массива с уникальными элементами
-    if (word[i] in alph)
+    if (word[i] in alph)    
         alph[word[i]]++
     else
         alph[word[i]] = 1
